@@ -24,7 +24,7 @@ def main(url, filepath):
     if not os.path.exists(os.path.dirname(filepath)):
         os.makedirs(os.path.dirname(filepath))
 
-    data.to_csv(filepath, encoding="utf-8")
+    data.to_csv(filepath, encoding="utf-8", index=False, header=False)
 
 if __name__=="__main__":
     main(opt["--url"], opt["--filepath"])
