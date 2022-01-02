@@ -8,7 +8,7 @@ Usage: src/download_data.py --url=<url> --filepath=<filepath>
 Options:
 --url=<url>                 URL of the csv file
 --filepath=<filepath>       Path where the file is stored in the local
-
+Example: python3 src/download_data.py --url=http://data.insideairbnb.com/united-states/ny/new-york-city/2021-11-02/visualisations/listings.csv --filepath=data/raw/airbnb.csv
 """
 
 from docopt import docopt 
