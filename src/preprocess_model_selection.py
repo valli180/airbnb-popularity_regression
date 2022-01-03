@@ -1,12 +1,12 @@
 """
 Reads train csv data from path, preprocess the data, build a preprocessor pipeline and output the preprocessor, give the results from cross validation, output an ensemble model
 
-Usage: preprocess_model_selection.py --train_set_path=<train_set_path> --column_transformer=<column_transformer> 
+Usage: preprocess_model_selection.py --train_set_path=<train_set_path>  --column_transformer_out_path=<column_transformer_out_path> 
 
 Options:
 
---train_set_path=<train_set_path>  
---column_transformer=<column_transformer> 
+--train_set_path=<train_set_path>                               path to the train set
+--column_transformer_out_path=<column_transformer_out_path>     path to column transformer
  
 """
 
@@ -24,12 +24,6 @@ from docopt import docopt
 opt = docopt(__doc__)
 
 
-def save_csv(results, results_out_path, filename="/results.csv"):
-
-    if not os.path.exists(results_out_path):
-        os.makedirs(results_out_path)
-
-    pd.DataFrame(results).to_csv(results_out_path + filename, encoding="utf-8")
 
 def define_feature_types(X_train):
     numeric_features = [
@@ -107,7 +101,7 @@ def define_column_transformer(X_train,categorical_features, pass_through_feature
     return column_transformer
 
 
-def main(train_set_path, column_transformer):
+def main(train_set_path, column_transformer_out_path):
     train_df = pd.read_csv(train_set_path)
     X_train, y_train = train_df.drop(columns = ["reviews_per_month"]), train_df["reviews_per_month"]
     numeric_features, categorical_features, text_features, drop_features, passthrough_features = define_feature_types(X_train)
@@ -119,3 +113,6 @@ def main(train_set_path, column_transformer):
         column_transformer_out_path
     )
     
+    
+if __name__ == "__main__":
+    main(opt["--train_set_path"], opt["--column_transformer_out_path"])
