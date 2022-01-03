@@ -1,12 +1,12 @@
 """
 Read data from the csv file and split into train and test set and save in a local path
-Usage: split_data.py --input_path=<input_path> --train_set_path=<train_set_path> --test_set_path=<test_set_path>
+Usage: split_data.py --input_path=<input_path> --train_set_path=<train_set_path> --test_set_path=<test_set_path> --val_set_path=<val_set_path>
 
 Options:
 --input_path=<input_path>           path to the input raw data
 --train_set_path=<train_set_path>   path to the output train data
 --test_set_path=<test_set_path>     path to the output test data
-
+--val_set_path=<val_set_path>       path to the output validation data
 """
 
 from docopt import docopt
@@ -28,8 +28,12 @@ def read_data(path):
     data=pd.read_csv(path)
     return data
     
-def split_data(data):
+def split_train_test_data(data):
     return train_test_split(data, test_size= 0.2, random_state=123)
+
+def split_train_val_data(data):
+    return train_test_split(data, test_size=0.25, random_state=123)
+
     
 def save_data(data, path):
     if not os.path.exists(os.path.dirname(path)):
@@ -39,11 +43,13 @@ def save_data(data, path):
 
 def main(input_path, train_set_path, test_set_path):
     df=read_data(input_path)
-    train_df, test_df = split_data(df)
-    train_df = create_new_features(train_df)
+    train_val_df, test_df = split_train_test_data(df)
+    train_val_df = create_new_features(train_df)
     test_df = create_new_features(test_df)
+    train_df, val_df = split_train_val_data(train_val_df)
     save_data(train_df, train_set_path)
     save_data(test_df, test_set_path)
+    save_data(val_df, val_set_path)
     
 
 if __name__ == "__main__":
